@@ -9,7 +9,7 @@ from alembic import context
 
 from app.database import Base
 from app.config import settings
-from app.postcards.postcard import Postcard
+# from app.postcards.postcard import Postcard
 
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
