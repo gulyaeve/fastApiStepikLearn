@@ -3,7 +3,11 @@ from datetime import datetime
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from app.bookings.router import router as booking_router
+
 app = FastAPI()
+
+app.include_router(booking_router)
 
 
 class SPostcard(BaseModel):
