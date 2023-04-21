@@ -12,10 +12,10 @@ app.include_router(users_router)
 app.include_router(booking_router)
 
 
-# class SPostcard(BaseModel):
-#     id: int
-#     name: str
-#     date_created: datetime
+class SPostcard(BaseModel):
+    id: int
+    name: str
+    date_created: datetime
 
 
 @app.get("/")
