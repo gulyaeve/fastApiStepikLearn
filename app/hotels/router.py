@@ -8,7 +8,7 @@ from app.hotels.schemas import SHotels
 
 router = APIRouter(
     prefix="/hotels",
-    tags=["отели"],
+    tags=["Отели"],
 )
 
 

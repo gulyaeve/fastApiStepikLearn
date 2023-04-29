@@ -10,7 +10,7 @@ from app.hotels.router import router as hotels_router
 
 router = APIRouter(
     prefix=f"{hotels_router.prefix}/rooms",
-    tags=["комнаты"],
+    tags=["Комнаты"],
 )
 
 
