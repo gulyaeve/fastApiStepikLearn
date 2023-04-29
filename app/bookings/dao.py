@@ -5,12 +5,24 @@ from sqlalchemy import select, and_, or_, func, insert
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
 from app.database import engine, async_session_maker
-from app.rooms.models import Rooms
+from app.hotels.rooms.models import Rooms
 
 
 class BookingDAO(BaseDAO):
     model = Bookings
 
+    """
+    WITH booked_rooms AS (
+        SELECT * FROM bookings
+        WHERE room_id = 1 AND
+        (date_from >= '2023-05-15' AND date_from <= '2023-06-20') OR
+        (date_from <= '2023-05-15' AND date_to > '2023-05-15')
+    )
+    SELECT rooms.quantity - COUNT(booked_rooms.room_id) FROM rooms
+    LEFT JOIN booked_rooms ON booked_rooms.room_id = rooms.id
+    WHERE rooms.id = 1
+    GROUP BY rooms.quantity, booked_rooms.room_id
+    """
     @classmethod
     async def add(
             cls,
@@ -44,7 +56,7 @@ class BookingDAO(BaseDAO):
                 Rooms.quantity, booked_rooms.c.room_id
             )
 
-            print(get_rooms_left.compile(engine, compile_kwargs={'literal_binds': True}))
+            # print(get_rooms_left.compile(engine, compile_kwargs={'literal_binds': True}))
 
             rooms_left = await session.execute(get_rooms_left)
             rooms_left = rooms_left.scalar()
