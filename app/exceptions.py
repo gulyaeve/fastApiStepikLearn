@@ -40,3 +40,9 @@ RoomCanNotBeBooked = HTTPException(
     status_code=status.HTTP_409_CONFLICT,
     detail="Нет свободных номеров"
 )
+
+
+BookingNotExists = HTTPException(
+    status_code=status.HTTP_409_CONFLICT,
+    detail="Бронирование не найдено"
+)
