@@ -16,22 +16,6 @@ app.include_router(hotels_router)
 app.include_router(rooms_router)
 
 
-class SPostcard(BaseModel):
-    id: int
-    name: str
-    date_created: datetime
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-
-@app.post("/postcard")
-async def add_postcard(postcard_data: SPostcard):
-    return postcard_data.dict()
+# @app.get("/")
+# async def root():
+#     return {"message": "Hello World"}
