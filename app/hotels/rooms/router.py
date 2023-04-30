@@ -14,6 +14,6 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("/{hotel_id}")
 async def get_rooms(hotel_id: int, date_from: date, date_to: date) -> list[SRooms]:
     return await RoomsDAO.find_all(hotel_id=hotel_id, date_from=date_from, date_to=date_to)

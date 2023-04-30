@@ -53,16 +53,18 @@ class RoomsDAO(BaseDAO):
                 )
             ).cte("booked_rooms")
 
+            total_days: int = (date_to - date_from).days
+
             get_rooms = select(
                 Rooms.id,
                 Rooms.hotel_id,
                 Rooms.name,
                 Rooms.description,
-                Rooms.services,
                 Rooms.price,
+                Rooms.services,
                 Rooms.quantity,
                 Rooms.image_id,
-                (func.count(Rooms.price * (date_to - date_from).days)).label("total_cost"),
+                (Rooms.price * total_days).label("total_cost"),
                 (Rooms.quantity - func.count(booked_rooms.c.room_id)).label("rooms_left")
             ).select_from(Rooms).join(
                 booked_rooms, Rooms.id == booked_rooms.c.room_id, isouter=True
@@ -72,11 +74,9 @@ class RoomsDAO(BaseDAO):
                 Rooms.id
             )
 
-            print(get_rooms.compile(engine, compile_kwargs={'literal_binds': True}))
+            # print(get_rooms.compile(engine, compile_kwargs={'literal_binds': True}))
             rooms = await session.execute(get_rooms)
-            print(rooms.all())
             return rooms.all()
-        # TODO: Fix this
 
 
 if __name__ == "__main__":
