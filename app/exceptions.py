@@ -1,48 +1,49 @@
 from fastapi import HTTPException, status
 
 
-UserAlreadyExistsException = HTTPException(
-    status_code=status.HTTP_409_CONFLICT,
-    detail="User exists",
-)
+class BookingException(HTTPException):
+    status_code = 500
+    detail = ""
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
 
 
-IncorrectEmailOrPasswordException = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="Wrong email or password",
-)
+class UserAlreadyExistsException(BookingException):
+    status_code = status.HTTP_409_CONFLICT,
+    detail = "User exists",
 
 
-TokenAbsentException = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="No token",
-)
+class IncorrectEmailOrPasswordException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED,
+    detail = "Wrong email or password",
 
 
-TokenExpiredException = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="Expired token",
-)
+class TokenAbsentException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED,
+    detail = "No token",
 
 
-IncorrectTokenFormatException = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="Wrong token format",
-)
+class TokenExpiredException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED,
+    detail = "Expired token",
 
 
-UserIsNotPresentException = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED
-)
+class IncorrectTokenFormatException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED,
+    detail = "Wrong token format",
 
 
-RoomCanNotBeBooked = HTTPException(
-    status_code=status.HTTP_409_CONFLICT,
-    detail="Нет свободных номеров"
-)
+class UserIsNotPresentException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Пользователь не найден"
 
 
-BookingNotExists = HTTPException(
-    status_code=status.HTTP_409_CONFLICT,
-    detail="Бронирование не найдено"
-)
+class RoomCanNotBeBooked(BookingException):
+    status_code = status.HTTP_409_CONFLICT,
+    detail = "Нет свободных номеров"
+
+
+class BookingNotExists(BookingException):
+    status_code = status.HTTP_409_CONFLICT,
+    detail = "Бронирование не найдено"
