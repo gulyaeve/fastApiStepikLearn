@@ -56,12 +56,7 @@ class HotelsDAO(BaseDAO):
             ).cte("booked_rooms")
 
             get_hotels = select(
-                Hotels.id,
-                Hotels.name,
-                Hotels.location,
-                Hotels.services,
-                Hotels.rooms_quantity,
-                Hotels.image_id,
+                Hotels.__table__.columns,
                 (Hotels.rooms_quantity - func.count(booked_rooms.c.hotel_id)).label("left_rooms")
             ).select_from(Hotels).join(
                 Rooms, Hotels.id == Rooms.hotel_id
@@ -74,7 +69,7 @@ class HotelsDAO(BaseDAO):
             )
             # print(get_hotels.compile(engine, compile_kwargs={'literal_binds': True}))
             hotels = await session.execute(get_hotels)
-            # print(hotels)
+            print(hotels.all())
             return hotels.all()
 
 
