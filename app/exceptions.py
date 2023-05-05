@@ -10,28 +10,28 @@ class BookingException(HTTPException):
 
 
 class UserAlreadyExistsException(BookingException):
-    status_code = status.HTTP_409_CONFLICT,
-    detail = "User exists",
+    status_code = status.HTTP_409_CONFLICT
+    detail = "User exists"
 
 
 class IncorrectEmailOrPasswordException(BookingException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "Wrong email or password",
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Wrong email or password"
 
 
 class TokenAbsentException(BookingException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "No token",
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "No token"
 
 
 class TokenExpiredException(BookingException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "Expired token",
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Expired token"
 
 
 class IncorrectTokenFormatException(BookingException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "Wrong token format",
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Wrong token format"
 
 
 class UserIsNotPresentException(BookingException):
@@ -40,10 +40,10 @@ class UserIsNotPresentException(BookingException):
 
 
 class RoomCanNotBeBooked(BookingException):
-    status_code = status.HTTP_409_CONFLICT,
+    status_code = status.HTTP_409_CONFLICT
     detail = "Нет свободных номеров"
 
 
 class BookingNotExists(BookingException):
-    status_code = status.HTTP_409_CONFLICT,
+    status_code = status.HTTP_409_CONFLICT
     detail = "Бронирование не найдено"
