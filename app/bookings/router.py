@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request, Depends
 from app.bookings.dao import BookingDAO
 from app.bookings.schemas import SBooking
 from app.exceptions import RoomCanNotBeBooked, BookingNotExists
-from app.users.dependecies import get_current_user
+from app.users.dependencies import get_current_user
 from app.users.models import Users
 
 router = APIRouter(
