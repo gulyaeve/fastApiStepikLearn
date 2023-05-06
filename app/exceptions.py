@@ -44,6 +44,11 @@ class RoomCanNotBeBooked(BookingException):
     detail = "Нет свободных номеров"
 
 
+class RoomFullyBooked(BookingException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Не осталось свободных номеров"
+
+
 class BookingNotExists(BookingException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Бронирование не найдено"

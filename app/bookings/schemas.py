@@ -14,8 +14,8 @@ class SBooking(BaseModel):
     total_days: int
     image_id: int
     name: str
-    description: str
-    services: list[str]
+    description: str | None
+    services: list[str] | None
 
     class Config:
         orm_mode = True

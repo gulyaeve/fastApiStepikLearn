@@ -14,4 +14,4 @@ class Users(Base):
     booking = relationship("Bookings", back_populates="user")
 
     def __str__(self):
-        return f"User {self.email}"
+        return f"Пользователь {self.email}"
