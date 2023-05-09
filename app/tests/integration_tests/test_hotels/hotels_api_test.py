@@ -20,8 +20,3 @@ async def test_get_hotels(
     })
     print(response.json())
     assert response.status_code == status_code
-
-    # Необходимо добавить эндпоинт для получения бронирований
-    # response = await authenticated_ac.get("/bookings/get")
-    # print(f"{len(response.json())=} {booked_rooms=}")
-    # assert len(response.json()) == booked_rooms
