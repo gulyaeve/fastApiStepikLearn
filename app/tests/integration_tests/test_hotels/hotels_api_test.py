@@ -14,8 +14,7 @@ async def test_get_hotels(
     status_code,
     ac: AsyncClient,
 ):
-    response = await ac.get("/hotels/{hotel_location}", params={
-        "hotel_location": hotel_location,
+    response = await ac.get(f"/hotels/{hotel_location}", params={
         "date_from": date_from,
         "date_to": date_to,
     })
