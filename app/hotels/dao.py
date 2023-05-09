@@ -69,7 +69,7 @@ class HotelsDAO(BaseDAO):
             )
             # print(get_hotels.compile(engine, compile_kwargs={'literal_binds': True}))
             hotels = await session.execute(get_hotels)
-            print(hotels.all())
+            # print(hotels.all())
             return hotels.all()
 
 
