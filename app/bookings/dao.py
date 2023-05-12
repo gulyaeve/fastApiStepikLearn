@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
-from app.database import engine, async_session_maker
+from app.database import async_session_maker
 from app.exceptions import RoomFullyBooked
 from app.hotels.rooms.models import Rooms
 
