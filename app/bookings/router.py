@@ -19,6 +19,14 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
     return await BookingDAO.find_all_to_user(user_id=user.id)
 
 
+@router.get("/get/{booking_id}")
+async def get_booking(booking_id: int, user: Users = Depends(get_current_user)):
+    booking = await BookingDAO.find_one_or_none(id=booking_id, user_id=user.id)
+    if not booking:
+        raise BookingNotExists
+    return booking
+
+
 @router.post("", status_code=201)
 async def add_booking(
         room_id: int,
