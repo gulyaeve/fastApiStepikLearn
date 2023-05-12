@@ -28,11 +28,11 @@ class BookingDAO(BaseDAO):
 
     @classmethod
     async def add(
-            cls,
-            user_id: int,
-            room_id: int,
-            date_from: date,
-            date_to: date,
+        cls,
+        user_id: int,
+        room_id: int,
+        date_from: date,
+        date_to: date,
     ):
         """
         WITH booked_rooms AS (
@@ -82,7 +82,9 @@ class BookingDAO(BaseDAO):
                         )
                     )
                     .select_from(Rooms)
-                    .join(booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True)
+                    .join(
+                        booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True
+                    )
                     .where(Rooms.id == room_id)
                     .group_by(Rooms.quantity, booked_rooms.c.room_id)
                 )
@@ -130,6 +132,7 @@ class BookingDAO(BaseDAO):
             }
             print(f"{msg}, extra={extra}, exc_info=True")
             # logger.error(msg, extra=extra, exc_info=True)
+
     # @classmethod
     # async def add(
     #         cls,
@@ -204,26 +207,28 @@ class BookingDAO(BaseDAO):
     LEFT JOIN rooms ON bookings.room_id = rooms.id
     WHERE user_id = 3
     """
+
     @classmethod
     async def find_all_to_user(cls, user_id: int):
         async with async_session_maker() as session:
-            get_bookings_for_user = select(
-                Bookings.id,
-                Bookings.room_id,
-                Bookings.user_id,
-                Bookings.date_from,
-                Bookings.date_to,
-                Bookings.price,
-                Bookings.total_cost,
-                Bookings.total_days,
-                Rooms.image_id,
-                Rooms.name,
-                Rooms.description,
-                Rooms.services
-            ).select_from(Bookings).join(
-                Rooms, Bookings.room_id == Rooms.id, isouter=True
-            ).where(
-                Bookings.user_id == user_id
+            get_bookings_for_user = (
+                select(
+                    Bookings.id,
+                    Bookings.room_id,
+                    Bookings.user_id,
+                    Bookings.date_from,
+                    Bookings.date_to,
+                    Bookings.price,
+                    Bookings.total_cost,
+                    Bookings.total_days,
+                    Rooms.image_id,
+                    Rooms.name,
+                    Rooms.description,
+                    Rooms.services,
+                )
+                .select_from(Bookings)
+                .join(Rooms, Bookings.room_id == Rooms.id, isouter=True)
+                .where(Bookings.user_id == user_id)
             )
 
             bookings_for_user = (await session.execute(get_bookings_for_user)).all()

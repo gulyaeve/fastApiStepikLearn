@@ -27,9 +27,7 @@ async def login_user(response: Response, user_data: SUserAuth):
     user: Users = await authenticate_user(user_data.email, user_data.password)
     if not user:
         raise IncorrectEmailOrPasswordException
-    access_token = create_access_token(
-        {"sub": str(user.id)}
-    )
+    access_token = create_access_token({"sub": str(user.id)})
     response.set_cookie("booking_access_token", access_token, httponly=True)
     return {"access_token": access_token}
 

@@ -4,8 +4,12 @@ from fastapi import Request, Depends
 from jose import jwt, JWTError
 
 from app.config import settings
-from app.exceptions import TokenAbsentException, TokenExpiredException, IncorrectTokenFormatException, \
-    UserIsNotPresentException
+from app.exceptions import (
+    TokenAbsentException,
+    TokenExpiredException,
+    IncorrectTokenFormatException,
+    UserIsNotPresentException,
+)
 from app.users.dao import UsersDAO
 
 
@@ -18,9 +22,7 @@ def get_token(request: Request):
 
 async def get_current_user(token: str = Depends(get_token)):
     try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, settings.ALGORITHM
-        )
+        payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
     except JWTError:
         raise IncorrectTokenFormatException
 

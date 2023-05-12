@@ -28,44 +28,47 @@ class HotelsDAO(BaseDAO):
     WHERE Lower(hotels.location) like Lower('%АлТАй%')
     GROUP BY hotels.id
     """
+
     @classmethod
-    async def find_all(
-            cls,
-            location: str,
-            date_from: date,
-            date_to: date
-    ):
+    async def find_all(cls, location: str, date_from: date, date_to: date):
         async with async_session_maker() as session:
-            booked_rooms = select(
-                Bookings.id,
-                Bookings.room_id,
-                Bookings.date_from,
-                Bookings.date_to,
-                Rooms
-            ).select_from(Bookings).join(Rooms, Bookings.room_id == Rooms.id).where(
-                or_(
-                    and_(
-                        Bookings.date_from >= date_from,
-                        Bookings.date_from <= date_to
-                    ),
-                    and_(
-                        Bookings.date_from <= date_from,
-                        Bookings.date_to > date_from
+            booked_rooms = (
+                select(
+                    Bookings.id,
+                    Bookings.room_id,
+                    Bookings.date_from,
+                    Bookings.date_to,
+                    Rooms,
+                )
+                .select_from(Bookings)
+                .join(Rooms, Bookings.room_id == Rooms.id)
+                .where(
+                    or_(
+                        and_(
+                            Bookings.date_from >= date_from,
+                            Bookings.date_from <= date_to,
+                        ),
+                        and_(
+                            Bookings.date_from <= date_from,
+                            Bookings.date_to > date_from,
+                        ),
+                    )
+                )
+                .cte("booked_rooms")
+            )
+
+            get_hotels = (
+                select(
+                    Hotels.__table__.columns,
+                    (Hotels.rooms_quantity - func.count(booked_rooms.c.hotel_id)).label(
+                        "left_rooms"
                     ),
                 )
-            ).cte("booked_rooms")
-
-            get_hotels = select(
-                Hotels.__table__.columns,
-                (Hotels.rooms_quantity - func.count(booked_rooms.c.hotel_id)).label("left_rooms")
-            ).select_from(Hotels).join(
-                Rooms, Hotels.id == Rooms.hotel_id
-            ).join(
-                booked_rooms, Rooms.id == booked_rooms.c.room_id, isouter=True
-            ).where(
-                func.lower(Hotels.location).contains(location.lower())
-            ).group_by(
-                Hotels.id
+                .select_from(Hotels)
+                .join(Rooms, Hotels.id == Rooms.hotel_id)
+                .join(booked_rooms, Rooms.id == booked_rooms.c.room_id, isouter=True)
+                .where(func.lower(Hotels.location).contains(location.lower()))
+                .group_by(Hotels.id)
             )
             # print(get_hotels.compile(engine, compile_kwargs={'literal_binds': True}))
             hotels = await session.execute(get_hotels)
@@ -74,4 +77,8 @@ class HotelsDAO(BaseDAO):
 
 
 if __name__ == "__main__":
-    asyncio.run(HotelsDAO.find_all("АлтАй", datetime.date(2023, 5, 15), datetime.date(2023, 6, 20)))
+    asyncio.run(
+        HotelsDAO.find_all(
+            "АлтАй", datetime.date(2023, 5, 15), datetime.date(2023, 6, 20)
+        )
+    )

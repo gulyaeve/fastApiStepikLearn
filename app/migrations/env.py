@@ -9,6 +9,7 @@ from alembic import context
 
 from app.database import Base
 from app.config import settings
+
 # from app.postcards.postcard import Postcard
 from app.users.models import Users
 from app.hotels.models import Hotels
@@ -78,9 +79,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

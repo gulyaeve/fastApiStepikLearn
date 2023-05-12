@@ -2,9 +2,12 @@ from httpx import AsyncClient
 import pytest
 
 
-@pytest.mark.parametrize("status_code", [
-    200,
-])
+@pytest.mark.parametrize(
+    "status_code",
+    [
+        200,
+    ],
+)
 async def test_get_and_delete_booking(
     status_code,
     authenticated_ac: AsyncClient,

@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
@@ -39,5 +38,7 @@ admin.add_view(RoomsAdmin)
 
 @app.on_event("startup")
 async def startup():
-    redis = aioredis.from_url(settings.redis_url, encoding="utf8", decode_responses=True)
+    redis = aioredis.from_url(
+        settings.redis_url, encoding="utf8", decode_responses=True
+    )
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")

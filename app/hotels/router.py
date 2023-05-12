@@ -20,7 +20,9 @@ async def get_hotels(location: str, date_from: date, date_to: date) -> list[SHot
         raise DateFromCannotBeAfterDateTo
     if date_to - date_from > max_days:
         raise CannotBookHotelForLongPeriod
-    return await HotelsDAO.find_all(location=location, date_from=date_from, date_to=date_to)
+    return await HotelsDAO.find_all(
+        location=location, date_from=date_from, date_to=date_to
+    )
 
 
 @router.get("/id/{hotel_id}")

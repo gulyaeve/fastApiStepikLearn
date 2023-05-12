@@ -26,52 +26,56 @@ class RoomsDAO(BaseDAO):
     WHERE rooms.hotel_id = 1
     GROUP BY rooms.id
     """
+
     @classmethod
-    async def find_all(
-        cls,
-        hotel_id: int,
-        date_from: date,
-        date_to: date
-    ):
+    async def find_all(cls, hotel_id: int, date_from: date, date_to: date):
         async with async_session_maker() as session:
-            booked_rooms = select(
-                Bookings.id,
-                Bookings.room_id,
-                Bookings.date_from,
-                Bookings.date_to,
-                Rooms
-            ).select_from(Bookings).join(Rooms, Bookings.room_id == Rooms.id).where(
-                or_(
-                    and_(
-                        Bookings.date_from >= date_from,
-                        Bookings.date_from <= date_to
-                    ),
-                    and_(
-                        Bookings.date_from <= date_from,
-                        Bookings.date_to > date_from
-                    ),
+            booked_rooms = (
+                select(
+                    Bookings.id,
+                    Bookings.room_id,
+                    Bookings.date_from,
+                    Bookings.date_to,
+                    Rooms,
                 )
-            ).cte("booked_rooms")
+                .select_from(Bookings)
+                .join(Rooms, Bookings.room_id == Rooms.id)
+                .where(
+                    or_(
+                        and_(
+                            Bookings.date_from >= date_from,
+                            Bookings.date_from <= date_to,
+                        ),
+                        and_(
+                            Bookings.date_from <= date_from,
+                            Bookings.date_to > date_from,
+                        ),
+                    )
+                )
+                .cte("booked_rooms")
+            )
 
             total_days: int = (date_to - date_from).days
 
-            get_rooms = select(
-                Rooms.id,
-                Rooms.hotel_id,
-                Rooms.name,
-                Rooms.description,
-                Rooms.price,
-                Rooms.services,
-                Rooms.quantity,
-                Rooms.image_id,
-                (Rooms.price * total_days).label("total_cost"),
-                (Rooms.quantity - func.count(booked_rooms.c.room_id)).label("rooms_left")
-            ).select_from(Rooms).join(
-                booked_rooms, Rooms.id == booked_rooms.c.room_id, isouter=True
-            ).where(
-                Rooms.hotel_id == hotel_id
-            ).group_by(
-                Rooms.id
+            get_rooms = (
+                select(
+                    Rooms.id,
+                    Rooms.hotel_id,
+                    Rooms.name,
+                    Rooms.description,
+                    Rooms.price,
+                    Rooms.services,
+                    Rooms.quantity,
+                    Rooms.image_id,
+                    (Rooms.price * total_days).label("total_cost"),
+                    (Rooms.quantity - func.count(booked_rooms.c.room_id)).label(
+                        "rooms_left"
+                    ),
+                )
+                .select_from(Rooms)
+                .join(booked_rooms, Rooms.id == booked_rooms.c.room_id, isouter=True)
+                .where(Rooms.hotel_id == hotel_id)
+                .group_by(Rooms.id)
             )
 
             # print(get_rooms.compile(engine, compile_kwargs={'literal_binds': True}))
@@ -80,4 +84,6 @@ class RoomsDAO(BaseDAO):
 
 
 if __name__ == "__main__":
-    asyncio.run(RoomsDAO.find_all(1, datetime.date(2023, 5, 15), datetime.date(2023, 6, 20)))
+    asyncio.run(
+        RoomsDAO.find_all(1, datetime.date(2023, 5, 15), datetime.date(2023, 6, 20))
+    )
