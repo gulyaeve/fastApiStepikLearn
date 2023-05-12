@@ -15,12 +15,12 @@ import pytest
     (4, "2030-05-10", "2030-05-24", 10, 409),
 ])
 async def test_add_and_get_booking(
-    room_id,
-    date_from,
-    date_to,
-    status_code,
-    booked_rooms,
-    authenticated_ac: AsyncClient,
+        room_id,
+        date_from,
+        date_to,
+        status_code,
+        booked_rooms,
+        authenticated_ac: AsyncClient,
 ):
     response = await authenticated_ac.post("/bookings", params={
         "room_id": room_id,
@@ -38,17 +38,17 @@ async def test_add_and_get_booking(
 
 @pytest.mark.parametrize("room_id,date_from,date_to,status_code_create,status_code_read,status_code_delete,"
                          "status_code_check", [
-    (5, "2030-05-01", "2030-05-15", 201, 200, 200, 409),
-])
+                             (5, "2030-05-01", "2030-05-15", 201, 200, 200, 409),
+                         ])
 async def test_crud_booking(
-    room_id,
-    date_from,
-    date_to,
-    status_code_create,
-    status_code_read,
-    status_code_delete,
-    status_code_check,
-    authenticated_ac: AsyncClient,
+        room_id,
+        date_from,
+        date_to,
+        status_code_create,
+        status_code_read,
+        status_code_delete,
+        status_code_check,
+        authenticated_ac: AsyncClient,
 ):
     # создание бронирования
     new_booking = await authenticated_ac.post("/bookings", params={
@@ -74,4 +74,3 @@ async def test_crud_booking(
     response_check = await authenticated_ac.get(f"/bookings/get/{booking.json()['id']}")
     print(response_check.status_code)
     assert response_check.status_code == status_code_check
-
