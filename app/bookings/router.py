@@ -1,6 +1,6 @@
 from datetime import date
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends
 
 from app.bookings.dao import BookingDAO
 from app.bookings.schemas import SBooking
