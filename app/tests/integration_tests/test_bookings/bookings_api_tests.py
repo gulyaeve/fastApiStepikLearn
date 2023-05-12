@@ -59,18 +59,19 @@ async def test_crud_booking(
     print(f"{new_booking.json()=}")
     assert new_booking.status_code == status_code_create
 
-    # получение бронирования
-    booking = await authenticated_ac.get(f"/bookings/get/{new_booking.json()['id']}")
-    print(f"{booking.json()=}")
-    assert booking.status_code == status_code_read
-    assert booking.json()['id'] == new_booking.json()['id']
+    if new_booking.status_code == status_code_create:
+        # получение бронирования
+        booking = await authenticated_ac.get(f"/bookings/get/{new_booking.json()['id']}")
+        print(f"{booking.json()=}")
+        assert booking.status_code == status_code_read
+        assert booking.json()['id'] == new_booking.json()['id']
 
-    # удаление бронирования
-    response_del = await authenticated_ac.delete(f"/bookings/{booking.json()['id']}")
-    print(response_del.status_code)
-    assert response_del.status_code == status_code_delete
+        # удаление бронирования
+        response_del = await authenticated_ac.delete(f"/bookings/{booking.json()['id']}")
+        print(response_del.status_code)
+        assert response_del.status_code == status_code_delete
 
-    # проверка удаления
-    response_check = await authenticated_ac.get(f"/bookings/get/{booking.json()['id']}")
-    print(response_check.status_code)
-    assert response_check.status_code == status_code_check
+        # проверка удаления
+        response_check = await authenticated_ac.get(f"/bookings/get/{booking.json()['id']}")
+        print(response_check.status_code)
+        assert response_check.status_code == status_code_check
