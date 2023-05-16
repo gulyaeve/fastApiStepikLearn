@@ -13,7 +13,7 @@ from app.config import settings
 # from app.postcards.postcard import Postcard
 from app.users.models import Users
 from app.hotels.models import Hotels
-from app.rooms.models import Rooms
+from app.hotels.rooms.models import Rooms
 from app.bookings.models import Bookings
 
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
