@@ -35,3 +35,4 @@ pyright==1.1.308
 jose==1.0.0
 python-json-logger==2.0.7
 sentry-sdk[fastapi]==1.23.0
+fastapi-versioning==0.10.0

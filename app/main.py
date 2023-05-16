@@ -23,11 +23,7 @@ from app.images.router import router as images_router
 
 
 sentry_sdk.init(
-    dsn="https://d04ff430df104b8fb21745383ff88b16@o4505194654859264.ingest.sentry.io/4505194657611776",
-
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production,
+    dsn=settings.SENTRY_DSN,
     traces_sample_rate=1.0,
 )
 
