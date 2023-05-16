@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi_versioning import VersionedFastAPI
 
 from redis import asyncio as aioredis
 from sqladmin import Admin
@@ -21,16 +22,12 @@ from app.hotels.rooms.router import router as rooms_router
 from app.pages.router import router as pages_router
 from app.images.router import router as images_router
 
-
 sentry_sdk.init(
     dsn=settings.SENTRY_DSN,
     traces_sample_rate=1.0,
 )
 
-
 app = FastAPI()
-
-app.mount("/static", StaticFiles(directory="app/static"), "static")
 
 app.include_router(users_router)
 app.include_router(booking_router)
@@ -39,6 +36,13 @@ app.include_router(rooms_router)
 app.include_router(pages_router)
 app.include_router(images_router)
 
+app = VersionedFastAPI(
+    app,
+    version_format='{major}',
+    prefix_format='/api/v{major}',
+)
+
+app.mount("/static", StaticFiles(directory="app/static"), "static")
 
 admin = Admin(app, engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)
