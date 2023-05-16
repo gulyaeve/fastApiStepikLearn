@@ -8,6 +8,7 @@ from app.dao.base import BaseDAO
 from app.database import async_session_maker
 from app.exceptions import RoomFullyBooked
 from app.hotels.rooms.models import Rooms
+from app.logger import logger
 
 
 class BookingDAO(BaseDAO):
@@ -130,8 +131,7 @@ class BookingDAO(BaseDAO):
                 "date_from": date_from,
                 "date_to": date_to,
             }
-            print(f"{msg}, extra={extra}, exc_info=True")
-            # logger.error(msg, extra=extra, exc_info=True)
+            logger.error(msg, extra=extra, exc_info=True)
 
     # @classmethod
     # async def add(
