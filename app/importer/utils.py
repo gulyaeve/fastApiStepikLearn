@@ -1,6 +1,5 @@
 import csv
 
-from sqlalchemy import insert
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import async_session_maker, Base
