@@ -21,6 +21,7 @@ from app.hotels.router import router as hotels_router
 from app.hotels.rooms.router import router as rooms_router
 from app.pages.router import router as pages_router
 from app.images.router import router as images_router
+from app.importer.router import router as import_router
 
 sentry_sdk.init(
     dsn=settings.SENTRY_DSN,
@@ -35,6 +36,7 @@ app.include_router(hotels_router)
 app.include_router(rooms_router)
 app.include_router(pages_router)
 app.include_router(images_router)
+app.include_router(import_router)
 
 app = VersionedFastAPI(
     app,
