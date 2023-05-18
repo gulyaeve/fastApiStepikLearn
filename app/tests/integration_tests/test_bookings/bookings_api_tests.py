@@ -37,7 +37,7 @@ async def test_add_and_get_booking(
     assert response.status_code == status_code
 
     # Необходимо добавить эндпоинт для получения бронирований
-    response = await authenticated_ac.get("/bookings/get")
+    response = await authenticated_ac.get("/bookings")
     print(f"{len(response.json())=} {booked_rooms=}")
     assert len(response.json()) == booked_rooms
 
@@ -74,7 +74,7 @@ async def test_crud_booking(
     if new_booking.status_code == status_code_create:
         # получение бронирования
         booking = await authenticated_ac.get(
-            f"/bookings/get/{new_booking.json()['id']}"
+            f"/bookings/{new_booking.json()['id']}"
         )
         print(f"{booking.json()=}")
         assert booking.status_code == status_code_read
@@ -89,7 +89,7 @@ async def test_crud_booking(
 
         # проверка удаления
         response_check = await authenticated_ac.get(
-            f"/bookings/get/{booking.json()['id']}"
+            f"/bookings/{booking.json()['id']}"
         )
         print(response_check.status_code)
         assert response_check.status_code == status_code_check

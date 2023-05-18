@@ -54,16 +54,16 @@ admin.add_view(HotelsAdmin)
 admin.add_view(RoomsAdmin)
 
 
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    # При подключении Prometheus + Grafana подобный лог не требуется
-    logger.info("Request handling time", extra={
-        "process_time": round(process_time, 4)
-    })
-    return response
+# @app.middleware("http")
+# async def add_process_time_header(request: Request, call_next):
+#     start_time = time.time()
+#     response = await call_next(request)
+#     process_time = time.time() - start_time
+#     # При подключении Prometheus + Grafana подобный лог не требуется
+#     logger.info("Request handling time", extra={
+#         "process_time": round(process_time, 4)
+#     })
+#     return response
 
 
 @app.on_event("startup")

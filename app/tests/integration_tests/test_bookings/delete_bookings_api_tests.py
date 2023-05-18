@@ -12,7 +12,7 @@ async def test_get_and_delete_booking(
     status_code,
     authenticated_ac: AsyncClient,
 ):
-    response = await authenticated_ac.get("/bookings/get")
+    response = await authenticated_ac.get("/bookings")
     print(response.json())
     assert response.status_code == status_code
 
@@ -21,7 +21,7 @@ async def test_get_and_delete_booking(
         print(response_del.status_code)
         assert response_del.status_code == status_code
 
-    response = await authenticated_ac.get("/bookings/get")
+    response = await authenticated_ac.get("/bookings")
     print(response.json())
     print(f"{len(response.json())=}")
     assert len(response.json()) == 0
